@@ -21,7 +21,6 @@ Adding a song:
 3. Add the lyric at /src/main/kotlin/furhatos/app/kidsfriend/text_files/lyrics/ folder
 
 
-Script:
 Script:\
 B: Hello there!\
 B: What do you want to do?\
@@ -43,5 +42,5 @@ H: how I wonder what you are\
 B: Great! What a collaboration!\
 B: What do you want to do?\
 H: no\
-B: Okay, that's sad. Have a splendid day!\
+B: Okay, that's sad. Have a splendid day!
 
