@@ -1,6 +1,6 @@
-Twinkle, twinkle, little star
-How I wonder what you are
-Up above the world so high
-Like a diamond in the sky
-Twinkle, twinkle little star
-How I wonder what you are
+https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/twinkle_cut_01.wav; Twinkle, twinkle little star
+https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/twinkle_cut_02.wav; How I wonder what you are
+https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/twinkle_cut_03.wav; Up above the world so high
+https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/twinkle_cut_04.wav; Like a diamond in the sky
+https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/twinkle_cut_05.wav; Twinkle, twinkle little star
+https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/twinkle_cut_06.wav; How I wonder what you are
