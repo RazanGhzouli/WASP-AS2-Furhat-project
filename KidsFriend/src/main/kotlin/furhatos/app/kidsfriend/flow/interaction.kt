@@ -120,7 +120,7 @@ fun SingAlternately(song: Song, lineCounter: Int = 0) : State = state(Options){
     }
 
     onEntry {
-        if (lineCounter < audioList.size-1) furhat.say({+Audio(audioList[lineCounter], lyricList[lineCounter])})
+        if (lineCounter < audioList.size-1) furhat.ask({+Audio(audioList[lineCounter], lyricList[lineCounter])})
         else if (lineCounter == audioList.size-1) {
             furhat.say({+Audio(audioList[lineCounter], lyricList[lineCounter])})
             furhat.say("Great! What a collaboration!")
@@ -130,7 +130,10 @@ fun SingAlternately(song: Song, lineCounter: Int = 0) : State = state(Options){
 
     onResponse {
         var responseText: String = it.text.toLowerCase()
-//        furhat.say("I know you said ${responseText} !")
+//        println(responseText)
+//        print("Expected: ")
+//        println(lyricList[lineCounter + 1])
+
         if (responseText == lyricList[lineCounter + 1].toLowerCase()) {
             if (lyricList.size-lineCounter > 2 ) goto(SingAlternately(song,lineCounter+2))
             else { //on the last line

@@ -1,8 +1,8 @@
 https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/wheels_01.wav; The wheels on the bus go round and round
-https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/wheels_02.wav; Round and round, round and round
+https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/wheels_02.wav; Round and round round and round
 https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/wheels_03.wav; The wheels on the bus go round and round
 https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/wheels_04.wav; All through the town
 https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/wheels_05.wav; The people on the bus go up and down
-https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/wheels_06.wav; Up and down, up and down
+https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/wheels_06.wav; Up and down up and down
 https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/wheels_07.wav; The people on the bus go up and down
 https://s3-eu-west-1.amazonaws.com/furhat-users/f6e48cd4-0cb6-4d01-a958-d363b75eb30b/audio/wheels_08.wav; All through the town
