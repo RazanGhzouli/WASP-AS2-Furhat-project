@@ -12,4 +12,10 @@ class KidsfriendSkill : Skill() {
 
 fun main(args: Array<String>) {
     Skill.main(args)
+    //val a = "twinkle twinkle little star"
+    //val b = "dsds"
+    //val c = "twinkle twinkle little star"
+    //println(a.substringAfter(c))
+    //println(a.substringAfter(b))
+
 }

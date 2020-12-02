@@ -21,7 +21,7 @@ class Mode : EnumEntity(stemming = true, speechRecPhrases = true) {
 
 class Song : EnumEntity() {
     override fun getEnum(lang: Language): List<String> {
-        return listOf("baby shark", "twinkle twinkle little star", "wheels on the bus")
+        return listOf("twinkle twinkle little star", "wheels on the bus")
     }
 }
 
