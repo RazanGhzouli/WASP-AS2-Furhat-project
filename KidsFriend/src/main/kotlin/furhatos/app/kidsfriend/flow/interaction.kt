@@ -1,5 +1,6 @@
 package furhatos.app.kidsfriend.flow
 
+import furhatos.gestures.Gestures
 import furhatos.app.kidsfriend.stringSimilarity
 import furhatos.app.kidsfriend.lyricpath
 import furhatos.app.kidsfriend.nlu.*
@@ -7,7 +8,6 @@ import furhatos.flow.kotlin.*
 import furhatos.nlu.common.Maybe
 import furhatos.nlu.common.No
 import furhatos.nlu.common.Yes
-import org.omg.CORBA.NO_RESPONSE
 import java.io.File
 import java.io.InputStream
 
@@ -108,6 +108,7 @@ fun SingWholeSong(song: Song) : State = state(Options){
         }
 
         for (i in 0 until audioList.size) {
+            furhat.gesture(Gestures.Roll(0.9), async = true)
             furhat.say({
                 +Audio(audioList[i], lyricList[i])
             })
@@ -127,7 +128,10 @@ fun SingAlternately(song: Song, lineCounter: Int = 0) : State = state(Options){
     }
 
     onEntry {
-        if (lineCounter < audioList.size-1) furhat.ask({+Audio(audioList[lineCounter], lyricList[lineCounter])})
+        if (lineCounter < audioList.size-1) {
+            furhat.gesture(Gestures.Roll(0.9), async = true)
+            furhat.ask({ +Audio(audioList[lineCounter], lyricList[lineCounter]) })
+        }
         else if (lineCounter == audioList.size-1) {
             furhat.say({+Audio(audioList[lineCounter], lyricList[lineCounter])})
             furhat.say("Great! What a collaboration!")
@@ -137,9 +141,6 @@ fun SingAlternately(song: Song, lineCounter: Int = 0) : State = state(Options){
 
     onResponse {
         var responseText: String = it.text.toLowerCase()
-//        println(responseText)
-//        print("Expected: ")
-//        println(lyricList[lineCounter + 1])
         var lyricLine = lyricList[lineCounter + 1].toLowerCase()
         var similarityScore = stringSimilarity(responseText, lyricLine)
         if (similarityScore > 0.5) { //set a low threshold for a kid ;)
@@ -150,7 +151,8 @@ fun SingAlternately(song: Song, lineCounter: Int = 0) : State = state(Options){
             }
         }
         else {
-            furhat.say("Probably my voice recognition is not perfect, it is ${similarityScore} similar.")
+            val similarityPercent = similarityScore * 100.0
+            furhat.say("Probably my voice recognition is not perfect, it is ${similarityPercent.toInt()} similar.")
             furhat.ask("Could you repeat it?")
         }
 
@@ -159,7 +161,8 @@ fun SingAlternately(song: Song, lineCounter: Int = 0) : State = state(Options){
 }
 
 
-fun SingAlong(song: Song, lineCounter: Int = 0) : State = state(Options){
+fun SingAlong(song: Song, lineCounter: Int = 0, score: Double = 0.0) : State = state(Options){
+    //Limitation: Someone should sing it line per line
     val songString = song.toString().toLowerCase()
     val inputStream: InputStream = File("$lyricpath/$songString.txt").inputStream()
     val audioList = mutableListOf<String>()
@@ -169,35 +172,46 @@ fun SingAlong(song: Song, lineCounter: Int = 0) : State = state(Options){
         lyricList.add(it.split("; ")[1]);
     }
 
+
     onEntry {
-        if (lineCounter < audioList.size) furhat.listen(timeout = 1500)
-        else if (lineCounter >= audioList.size) {
-            //furhat.say(lyricList[lineCounter])
-            furhat.say("Great! What a collaboration!")
+        if (lineCounter >= audioList.size) {
+            val finalScore = score * 100.0
+            if (score > 0.95) furhat.say("Awesome! You sing it perfectly!")
+            else if (score > 0.7) furhat.say("Great! You remember ${finalScore.toInt()} percent!") //add wink
+            else if (score > 0.4) {
+                furhat.say("Not bad! You cover ${finalScore.toInt()} percent of the song!") //add meh expression
+                goto(OfferSingAlternately(song))
+                }
+            else {
+                furhat.say ("Singing only ${finalScore.toInt()} percent of the song?")
+                goto(OfferSingWholeSong(song))
+            }
             goto(SelectMode)
+        }
+        else {
+            furhat.gesture(Gestures.Roll(0.9), async = true)
+            furhat.listen(timeout = 1500)
         }
     }
 
     onResponse {
         var responseText: String = it.text.toLowerCase()
-//        println(responseText)
-//        print("Expected: ")
-//        println(lyricList[lineCounter + 1])
         var lyricLine = lyricList[lineCounter].toLowerCase()
         var similarityScore = stringSimilarity(responseText, lyricLine)
+        var new_score = score + similarityScore/audioList.size.toDouble()
         var leftWords = lyricLine.substringAfter(responseText)
-        if (leftWords == "") goto(SingAlong(song,lineCounter+1)) //perfect match
+        if (leftWords == "") goto(SingAlong(song,lineCounter+1, new_score)) //perfect match
         else if (leftWords.length < lyricLine.length){ // some early words are correct, need to say the rest
             furhat.say(leftWords)
-            goto(SingAlong(song,lineCounter+1))
+            goto(SingAlong(song,lineCounter+1, new_score))
         }
         else if (similarityScore > 0.9){ //probably the recognizer is not perfect or a bit of mistake, continue singing!
-            goto(SingAlong(song,lineCounter+1))
+            goto(SingAlong(song,lineCounter+1, new_score))
         }
         else{// it hears something, but completely different
             furhat.say("It sounds something else, it should be:")
             furhat.say(lyricLine)
-            goto(SingAlong(song,lineCounter+1))
+            goto(SingAlong(song,lineCounter+1, new_score))
         }
 
     }
@@ -205,10 +219,38 @@ fun SingAlong(song: Song, lineCounter: Int = 0) : State = state(Options){
     onNoResponse {
         //var lyricLine = lyricList[lineCounter].toLowerCase()
         furhat.say(lyricList[lineCounter])
-        goto(SingAlong(song,lineCounter+1))
+        goto(SingAlong(song,lineCounter+1, score))
 
     }
 
+}
+
+fun OfferSingWholeSong(song: Song) : State = state(Options){
+    onEntry {
+        furhat.ask("I can sing the whole ${song} for you! Would you?")
+    }
+    onResponse<Yes> {
+        furhat.say("Okay!")
+        goto(SingWholeSong(song))
+    }
+    onResponse<No> {
+        furhat.say("No problem. I can do other fun stuffs.")
+        goto(SelectMode)
+    }
+}
+
+fun OfferSingAlternately(song: Song) : State = state(Options){
+    onEntry {
+        furhat.ask("We can sing ${song} together! Would you?")
+    }
+    onResponse<Yes> {
+        furhat.say("Okay! I will start.")
+        goto(goto(SingAlternately(song)))
+    }
+    onResponse<No> {
+        furhat.say("No worries. There are other fun stuffs to do.")
+        goto(SelectMode)
+    }
 }
 
 fun SelectQuiz(something: Category) : State = state(Options) {
