@@ -23,7 +23,7 @@ fun TakingQuiz(quizType: String): State = state(Options) {
     inputStream.bufferedReader().forEachLine { lineList.add(it) }
     var givenClueCnt = 0
     val clueList = mutableListOf<String>()
-    var parts = lineList[0].split(":").toTypedArray()
+    var parts = lineList[Random(System.nanoTime()).nextInt(lineList.size)].split(":").toTypedArray()
     var clueNumber = Random(System.nanoTime()).nextInt(parts.size - 1)
     var objectName = parts[0]
     var clueCnt = parts.size - 1
