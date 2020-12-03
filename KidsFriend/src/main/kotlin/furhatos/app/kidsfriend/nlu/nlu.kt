@@ -33,7 +33,7 @@ class Category : EnumEntity(stemming = true, speechRecPhrases = true) {
 
 class ObjectType : EnumEntity(stemming = true, speechRecPhrases = true) {
     override fun getEnum(lang: Language): List<String> {
-        return listOf("apple", "banana", "skunk", "rabbit")
+        return listOf("apple", "banana", "lemon", "pear","skunk", "rabbit","bear","frog","cow","pig","dog","cat","lime","cherry","pineapple","orange","fox")
     }
 }
 
@@ -44,20 +44,26 @@ class Singing(var song : Song? = null) : Intent() {
 }
 
 
-class Quiz : Intent() {
-    override fun getExamples(lang: Language): List<String> {
-        return listOf("quiz", "I want a quiz", "I want to guess", "guessing game", "guess")
-    }
-}
+//class Quiz : Intent() {
+//    override fun getExamples(lang: Language): List<String> {
+//        return listOf("quiz", "I want a quiz", "I want to guess", "guessing game", "guess","I want to guess @quizSubject")
+//    }
+//}
 
 class QuizType(var quizSubject : Category? = null) : Intent() {
     override fun getExamples(lang: Language): List<String> {
-        return listOf("I want to guess @quizSubject", "@quizSubject")
+        return listOf("I want to guess @quizSubject", "@quizSubject","quiz", "I want a quiz", "I want to guess", "guessing game", "guess", "the @quizSubject game")
     }
 }
 
 class ObjectGuess(var guess : ObjectType? = null) : Intent() {
     override fun getExamples(lang: Language): List<String> {
         return listOf("I think it is @guess", "@guess", "I think @guess")
+    }
+}
+
+class StopPlaying : Intent() {
+    override fun getExamples(lang: Language): List<String> {
+        return listOf("stop", "can we stop", "give me the answer", "I give up", "new game", "I do not want to guess")
     }
 }

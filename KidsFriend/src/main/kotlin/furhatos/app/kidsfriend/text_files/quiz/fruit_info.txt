@@ -1,2 +1,4 @@
 apple:it is smooth:it can be red, green, or yellow:it grows on trees:it is crunchy and juicy
 banana:comes in its own wrapper called a peel:inside it is white:it is long and narrow:don't eat the peel!
+lemon:If you eat it your face will wrinkle:It is yellow
+pear:It is green:It is thicker in the bottom and thinner at the top

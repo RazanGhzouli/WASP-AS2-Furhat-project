@@ -8,6 +8,7 @@ import furhatos.app.kidsquiz.nlu.*
 import java.io.File
 import java.io.InputStream
 import furhatos.app.kidsfriend.flow.SelectQuiz
+import furhatos.app.kidsfriend.flow.TakingQuiz
 import furhatos.app.kidsfriend.lyricpath
 
 val Start: State = state(Interaction) {
@@ -43,15 +44,17 @@ val Options = state(Interaction) {
         )
     }
 
-    onResponse<Quiz> {
-
-        random(
-                { furhat.say("A guessing game is the perfect choice.") },
-                { furhat.say("A guessing game it is!") }
-        )
-
-        goto(SelectQuiz)
-
+    onResponse<QuizType> {
+        val quizSubject = it.intent.quizSubject
+        if (quizSubject != null) {
+            goto(TakingQuiz(quizSubject.text.toLowerCase()))
+        } else {
+            random(
+                    { furhat.say("A guessing game is the perfect choice.") },
+                    { furhat.say("A guessing game it is!") }
+            )
+            goto(SelectQuiz)
+        }
     }
 
     onResponse<RequestOptions> {
