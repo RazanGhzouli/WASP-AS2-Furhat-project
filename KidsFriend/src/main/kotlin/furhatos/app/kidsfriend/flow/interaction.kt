@@ -108,7 +108,7 @@ fun SingWholeSong(song: Song) : State = state(Options){
         }
 
         for (i in 0 until audioList.size) {
-            furhat.gesture(Gestures.Roll(0.9), async = true)
+            furhat.gesture(Gestures.Roll(0.9, 1.3,2), async = true)
             furhat.say({
                 +Audio(audioList[i], lyricList[i])
             })
@@ -129,7 +129,7 @@ fun SingAlternately(song: Song, lineCounter: Int = 0) : State = state(Options){
 
     onEntry {
         if (lineCounter < audioList.size-1) {
-            furhat.gesture(Gestures.Roll(0.9), async = true)
+            furhat.gesture(Gestures.Roll(0.9, 1.3,2), async = true)
             furhat.ask({ +Audio(audioList[lineCounter], lyricList[lineCounter]) })
         }
         else if (lineCounter == audioList.size-1) {
@@ -176,20 +176,30 @@ fun SingAlong(song: Song, lineCounter: Int = 0, score: Double = 0.0) : State = s
     onEntry {
         if (lineCounter >= audioList.size) {
             val finalScore = score * 100.0
-            if (score > 0.95) furhat.say("Awesome! You sing it perfectly!")
-            else if (score > 0.7) furhat.say("Great! You remember ${finalScore.toInt()} percent!") //add wink
+            if (score > 0.95) {
+                furhat.gesture(Gestures.BigSmile,async = true)
+                furhat.say("Awesome! You sing it perfectly!")
+                furhat.gesture(Gestures.Wink(1.0),async = false)
+            }
+            else if (score > 0.7) {
+                furhat.gesture(Gestures.BigSmile,async = true)
+                furhat.say("Great! You remember ${finalScore.toInt()} percent!" )
+                furhat.gesture(Gestures.Wink(1.0),async = false)
+            }
             else if (score > 0.4) {
-                furhat.say("Not bad! You cover ${finalScore.toInt()} percent of the song!") //add meh expression
+                furhat.gesture(Gestures.Thoughtful(0.9, 2.0), async = true)
+                furhat.say("Not bad! You cover ${finalScore.toInt()} percent of the song!")
                 goto(OfferSingAlternately(song))
                 }
             else {
+                furhat.gesture(Gestures.Shake(0.9, 1.0, 3), async = true)
                 furhat.say ("Singing only ${finalScore.toInt()} percent of the song?")
                 goto(OfferSingWholeSong(song))
             }
             goto(SelectMode)
         }
         else {
-            furhat.gesture(Gestures.Roll(0.9), async = true)
+            furhat.gesture(Gestures.Roll(0.9, 1.5), async = true)
             furhat.listen(timeout = 1500)
         }
     }
@@ -227,7 +237,7 @@ fun SingAlong(song: Song, lineCounter: Int = 0, score: Double = 0.0) : State = s
 
 fun OfferSingWholeSong(song: Song) : State = state(Options){
     onEntry {
-        furhat.ask("I can sing the whole ${song} for you! Would you?")
+        furhat.ask("I can sing the whole ${song} for you! May I?")
     }
     onResponse<Yes> {
         furhat.say("Okay!")
