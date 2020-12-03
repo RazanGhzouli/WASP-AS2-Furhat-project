@@ -1,11 +1,13 @@
 package furhatos.app.kidsfriend.flow
 
-import furhatos.nlu.common.*
-import furhatos.flow.kotlin.*
+import furhatos.app.kidsfriend.lyricpath
 import furhatos.app.kidsfriend.nlu.*
+import furhatos.flow.kotlin.*
+import furhatos.nlu.common.Maybe
+import furhatos.nlu.common.No
+import furhatos.nlu.common.Yes
 import java.io.File
 import java.io.InputStream
-import furhatos.app.kidsfriend.lyricpath
 
 val Start : State = state(Interaction) {
 
@@ -90,10 +92,19 @@ fun SelectSong(song: Song) : State = state(Options) {
 fun SingWholeSong(song: Song) : State = state(Options){
     val songString = song.toString().toLowerCase()
     val inputStream: InputStream = File("$lyricpath/$songString.txt").inputStream()
-    val lineList = mutableListOf<String>()
+    val audioList = mutableListOf<String>()
+    val lyricList = mutableListOf<String>() // probably nicer way to do with a list of lists
     onEntry {
-        inputStream.bufferedReader().forEachLine { lineList.add(it) }
-        lineList.forEach{furhat.say(it)}
+        inputStream.bufferedReader().forEachLine {
+            audioList.add(it.split("; ")[0]);
+            lyricList.add(it.split("; ")[1]);
+        }
+
+        for (i in 0 until audioList.size) {
+            furhat.say({
+                +Audio(audioList[i], lyricList[i])
+            })
+        }
         goto(SelectMode)
     }
 }
@@ -101,14 +112,17 @@ fun SingWholeSong(song: Song) : State = state(Options){
 fun SingAlternately(song: Song, lineCounter: Int = 0) : State = state(Options){
     val songString = song.toString().toLowerCase()
     val inputStream: InputStream = File("$lyricpath/$songString.txt").inputStream()
-    val lineList = mutableListOf<String>()
-    inputStream.bufferedReader().forEachLine { lineList.add(it) }
-
+    val audioList = mutableListOf<String>()
+    val lyricList = mutableListOf<String>() // probably nicer way to do with a list of lists
+    inputStream.bufferedReader().forEachLine {
+        audioList.add(it.split("; ")[0]);
+        lyricList.add(it.split("; ")[1]);
+    }
 
     onEntry {
-        if (lineCounter < lineList.size-1) furhat.ask(lineList[lineCounter])
-        else if (lineCounter == lineList.size-1) {
-            furhat.say(lineList[lineCounter])
+        if (lineCounter < audioList.size-1) furhat.ask({+Audio(audioList[lineCounter], lyricList[lineCounter])})
+        else if (lineCounter == audioList.size-1) {
+            furhat.say({+Audio(audioList[lineCounter], lyricList[lineCounter])})
             furhat.say("Great! What a collaboration!")
             goto(SelectMode)
         }
@@ -116,9 +130,12 @@ fun SingAlternately(song: Song, lineCounter: Int = 0) : State = state(Options){
 
     onResponse {
         var responseText: String = it.text.toLowerCase()
-        //furhat.say("I know you said ${responseText} !")
-        if (responseText == lineList[lineCounter + 1].toLowerCase()) {
-            if (lineList.size-lineCounter > 2 ) goto(SingAlternately(song,lineCounter+2))
+//        println(responseText)
+//        print("Expected: ")
+//        println(lyricList[lineCounter + 1])
+
+        if (responseText == lyricList[lineCounter + 1].toLowerCase()) {
+            if (lyricList.size-lineCounter > 2 ) goto(SingAlternately(song,lineCounter+2))
             else { //on the last line
                 furhat.say("Bravo! What a collaboration!")
                 goto(SelectMode)
