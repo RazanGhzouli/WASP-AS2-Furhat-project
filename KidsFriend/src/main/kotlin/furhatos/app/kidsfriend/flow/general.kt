@@ -1,5 +1,6 @@
 package furhatos.app.kidsfriend.flow
 
+import furhatos.app.kidsquiz.flow.Start
 import furhatos.flow.kotlin.*
 import furhatos.util.*
 

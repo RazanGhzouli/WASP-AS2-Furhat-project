@@ -1,2 +1,1 @@
-package furhatos.app.kidsfriend.flow
-
+package furhatos.app.kidsfriend

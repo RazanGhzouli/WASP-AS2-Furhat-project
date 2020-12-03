@@ -1,6 +1,7 @@
 package furhatos.app.kidsfriend
 
-import furhatos.app.kidsfriend.flow.*
+import furhatos.app.kidsfriend.flow.Idle
+import furhatos.app.kidsquiz.flow.*
 import furhatos.skills.Skill
 import furhatos.flow.kotlin.*
 

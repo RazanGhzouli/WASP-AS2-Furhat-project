@@ -1,4 +1,4 @@
-package furhatos.app.kidsfriend.nlu
+package furhatos.app.kidsquiz.nlu
 
 import furhatos.nlu.EnumEntity
 import furhatos.nlu.Intent
@@ -31,15 +31,33 @@ class Category : EnumEntity(stemming = true, speechRecPhrases = true) {
     }
 }
 
+class ObjectType : EnumEntity(stemming = true, speechRecPhrases = true) {
+    override fun getEnum(lang: Language): List<String> {
+        return listOf("apple", "banana", "skunk", "rabbit")
+    }
+}
+
 class Singing(var song : Song? = null) : Intent() {
     override fun getExamples(lang: Language): List<String> {
         return listOf("Sing", "Singing", "@song", "I want to sing", "I would like to sing", "I want to sing @song", "I would like to sing @song")
     }
 }
 
-class Quiz(var something : Category? = null) : Intent() {
+
+class Quiz : Intent() {
     override fun getExamples(lang: Language): List<String> {
-        return listOf("quiz", "I want a quiz", "I want to guess @something")
+        return listOf("quiz", "I want a quiz", "I want to guess", "guessing game", "guess")
     }
 }
 
+class QuizType(var quizSubject : Category? = null) : Intent() {
+    override fun getExamples(lang: Language): List<String> {
+        return listOf("I want to guess @quizSubject", "@quizSubject")
+    }
+}
+
+class ObjectGuess(var guess : ObjectType? = null) : Intent() {
+    override fun getExamples(lang: Language): List<String> {
+        return listOf("I think it is @guess", "@guess", "I think @guess")
+    }
+}
