@@ -1,17 +1,17 @@
 package furhatos.app.kidsfriend.flow
 
+import furhatos.flow.kotlin.*
+import java.io.File
+import java.io.InputStream
+import furhatos.app.kidsfriend.lyricpath
 import furhatos.gestures.Gestures
 import furhatos.app.kidsfriend.stringSimilarity
-import furhatos.app.kidsfriend.lyricpath
 import furhatos.app.kidsfriend.nlu.*
-import furhatos.flow.kotlin.*
 import furhatos.nlu.common.Maybe
 import furhatos.nlu.common.No
 import furhatos.nlu.common.Yes
-import java.io.File
-import java.io.InputStream
 
-val Start : State = state(Interaction) {
+val Start: State = state(Interaction) {
 
     onEntry {
         random(
@@ -38,13 +38,23 @@ val Options = state(Interaction) {
         }
     }
 
-    onResponse<Quiz> {
-        val story = it.intent.something
-        if (story != null) {
-            goto(SelectQuiz(story))
-        }
-        else {
-            propagate()
+    onResponse<Yes> {
+        random(
+                { furhat.ask("Do you want a song or a guessing game?") },
+                { furhat.ask("Yey! Do you want a play a guessing game or sing a song?") }
+        )
+    }
+
+    onResponse<QuizType> {
+        val quizSubject = it.intent.quizSubject
+        if (quizSubject != null) {
+            goto(TakingQuiz(quizSubject.text.toLowerCase()))
+        } else {
+            random(
+                    { furhat.say("A guessing game is the perfect choice.") },
+                    { furhat.say("A guessing game it is!") }
+            )
+            goto(SelectQuiz)
         }
     }
 /*    onResponse<RequestOptions> {
@@ -68,9 +78,9 @@ val Options = state(Interaction) {
 val SelectMode = state(Options) {
     onEntry {
         random(
-                {furhat.ask("Do you want to sing or play a quiz?")},
-                {furhat.ask("shall we sing or play a quiz?")},
-                {furhat.ask("Would you like to sing or play a quiz with me?")}
+                {furhat.ask("Do you want to sing or play a guessing game?")},
+                {furhat.ask("shall we sing or play a guessing game?")},
+                {furhat.ask("Would you like to sing or play a guessing game with me?")}
         )
     }
     // my changes
@@ -92,7 +102,7 @@ val SelectMode = state(Options) {
     }
 }
 
-fun SelectSong(song: Song) : State = state(Options) {
+fun SelectSong(song: Song): State = state(Options) {
     onEntry {
         furhat.say("${song}, what a lovely song!")
         furhat.ask("Do you know it? If you don't just say maybe and we can sing together")
@@ -113,8 +123,9 @@ fun SelectSong(song: Song) : State = state(Options) {
     }
 }
 
-fun SingWholeSong(song: Song) : State = state(Options){
+fun SingWholeSong(song: Song): State = state(Options) {
     val songString = song.toString().toLowerCase()
+//    val inputStream: InputStream = File("tmp.txt").inputStream()
     val inputStream: InputStream = File("$lyricpath/$songString.txt").inputStream()
     val audioList = mutableListOf<String>()
     val lyricList = mutableListOf<String>() // probably nicer way to do with a list of lists
@@ -141,8 +152,9 @@ fun SingWholeSong(song: Song) : State = state(Options){
 
 }
 
-fun SingAlternately(song: Song, lineCounter: Int = 0) : State = state(Options){
+fun SingAlternately(song: Song, lineCounter: Int = 0): State = state(Options) {
     val songString = song.toString().toLowerCase()
+//    val inputStream: InputStream = File("tmp.txt").inputStream()
     val inputStream: InputStream = File("$lyricpath/$songString.txt").inputStream()
     val audioList = mutableListOf<String>()
     val lyricList = mutableListOf<String>() // probably nicer way to do with a list of lists
@@ -344,14 +356,6 @@ fun OfferSingAlternately(song: Song) : State = state(Options){
     onResponse<No> {
         furhat.say("No worries. There are other fun stuffs to do.")
         goto(SelectMode)
-    }
-
-}
-
-fun SelectQuiz(something: Category) : State = state(Options) {
-    onEntry {
-        furhat.say("${something}, what a good choice!")
-        furhat.say("Let's start!")
     }
 
 }

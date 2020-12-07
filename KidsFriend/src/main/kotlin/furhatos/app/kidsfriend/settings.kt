@@ -1,7 +1,9 @@
 package furhatos.app.kidsfriend
 
+
 val path = System.getProperty("user.dir")
 val lyricpath = "$path/src/main/kotlin/furhatos/app/kidsfriend/text_files/lyrics/"
+val quizpath = "$path/src/main/kotlin/furhatos/app/kidsfriend/text_files/quiz/"
 
 fun stringSimilarity(s1: String, s2:String): Double {
     var shorter = s1
@@ -43,5 +45,3 @@ fun levenshtein(lhs : CharSequence, rhs : CharSequence) : Int {
 
     return cost[lhsLength - 1]
 }
-
-
