@@ -1,12 +1,9 @@
-
-
 package furhatos.app.kidsfriend.flow
+import furhatos.app.kidsfriend.nlu.Category
+import furhatos.app.kidsfriend.nlu.ObjectGuess
+import furhatos.app.kidsfriend.nlu.QuizType
+import furhatos.app.kidsfriend.nlu.StopPlaying
 import furhatos.app.kidsfriend.quizpath
-import furhatos.app.kidsquiz.flow.Options
-import furhatos.app.kidsquiz.nlu.Category
-import furhatos.app.kidsquiz.nlu.ObjectGuess
-import furhatos.app.kidsquiz.nlu.StopPlaying
-import furhatos.app.kidsquiz.nlu.QuizType
 import furhatos.flow.kotlin.State
 import furhatos.flow.kotlin.furhat
 import furhatos.flow.kotlin.onResponse
@@ -25,7 +22,7 @@ fun TakingQuiz(quizType: String): State = state(Options) {
         inputStream = File("$quizpath/animals_info.txt").inputStream()
     }
 
-    val lineList = mutableListOf<String>()
+    var lineList = mutableListOf<String>()
     inputStream.bufferedReader().forEachLine { lineList.add(it) }
     var givenClueCnt = 0
     var parts = lineList[Random(System.nanoTime()).nextInt(lineList.size)].split(":").toTypedArray()
@@ -37,6 +34,22 @@ fun TakingQuiz(quizType: String): State = state(Options) {
 
 
     onEntry {
+        inputStream = File("$quizpath/fruit_info.txt").inputStream()
+
+        if (quizType.equals("animal")) {
+            inputStream = File("$quizpath/animals_info.txt").inputStream()
+        }
+
+        lineList = mutableListOf<String>()
+        inputStream.bufferedReader().forEachLine { lineList.add(it) }
+        givenClueCnt = 0
+        parts = lineList[Random(System.nanoTime()).nextInt(lineList.size)].split(":").toTypedArray()
+        clueNumber = Random(System.nanoTime()).nextInt(parts.size - 1)
+        objectName = parts[0]
+        clueCnt = parts.size - 1
+        askedForLastTime = false
+
+
         furhat.say("Ok I'll give you some clues and you will guess what $quizType I'm thinking of.")
 
 

@@ -1,27 +1,27 @@
-package furhatos.app.kidsquiz.nlu
+package furhatos.app.kidsfriend.nlu
 
 import furhatos.nlu.EnumEntity
 import furhatos.nlu.Intent
 import furhatos.util.Language
 
-class RequestOptions: Intent() {
+/*class RequestOptions: Intent() {
     override fun getExamples(lang: Language): List<String> {
         return listOf("What can you do?",
                 "What are the options?",
                 "What are the alternatives?",
                 "What do you have?")
     }
-}
+}*/
 
 class Mode : EnumEntity(stemming = true, speechRecPhrases = true) {
     override fun getEnum(lang: Language): List<String> {
         return listOf("sing", "quiz")
     }
 }
-
-class Song : EnumEntity() {
+// me adding things
+class Song : EnumEntity()  {
     override fun getEnum(lang: Language): List<String> {
-        return listOf("baby shark", "twinkle twinkle little star", "wheels on the bus")
+        return listOf("twinkle twinkle little star: twinkle twinkle little star, twinkle, twinkle twinkle,little star","wheels on the bus: wheels on the bus, wheels, on the bus, bus")
     }
 }
 
@@ -39,7 +39,7 @@ class ObjectType : EnumEntity(stemming = true, speechRecPhrases = true) {
 
 class Singing(var song : Song? = null) : Intent() {
     override fun getExamples(lang: Language): List<String> {
-        return listOf("Sing", "Singing", "@song", "I want to sing", "I would like to sing", "I want to sing @song", "I would like to sing @song")
+        return listOf("Sing", "Singing", "@song", "I want to sing", "I would like to sing", "I want to sing @song", "I would like to sing @song","sing @song")
     }
 }
 
@@ -67,3 +67,4 @@ class StopPlaying : Intent() {
         return listOf("stop", "can we stop", "give me the answer", "I give up", "new game", "I do not want to guess")
     }
 }
+
