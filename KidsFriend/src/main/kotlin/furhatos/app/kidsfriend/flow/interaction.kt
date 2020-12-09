@@ -270,12 +270,12 @@ fun SingAlong(song: Song, lineCounter: Int = 0, score: Double = 0.0) : State = s
             }
             goto(SelectMode)
         }
-        else {
+/*        else {
             furhat.gesture(Gestures.Roll(0.9, 1.5), async = true)
             furhat.listen(timeout = 1500)
             furhat.say("Why you are not singing. Do you want to change the game?")
             goto(SelectMode)
-        }
+        }*/
     }
 
     onResponse {
