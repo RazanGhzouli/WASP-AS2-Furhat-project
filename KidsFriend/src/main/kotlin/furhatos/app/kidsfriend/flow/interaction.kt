@@ -15,9 +15,9 @@ val Start: State = state(Interaction) {
 
     onEntry {
         random(
-                {furhat.say("Hello there!" )},
-                {furhat.say("Hi my friend!" )},
-                {furhat.say("Hey You!" )}
+                {furhat.say("Hello there! I am Fred" )},
+                {furhat.say("Hi my friend! I am Fred" )},
+                {furhat.say("Hey You! I am Fred" )}
         )
 
         goto(SelectMode)
@@ -105,7 +105,7 @@ val SelectMode = state(Options) {
 fun SelectSong(song: Song): State = state(Options) {
     onEntry {
         furhat.say("${song}, what a lovely song!")
-        furhat.ask("Do you know it? If you don't just say maybe and we can sing together")
+        furhat.ask("Do you know it? If you don't just say maybe and we can sing together, or say no and I can sing it for you.")
     }
     onResponse<No> {
         furhat.say("Okay, I will sing the whole song for you!")
